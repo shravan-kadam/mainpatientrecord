@@ -72,11 +72,46 @@
             background: #f9f9f9;
         }
 
+        .patient {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .patient button {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .patient button:hover {
+            background: #c82333;
+        }
+
         footer {
             background: #333;
             color: #fff;
             text-align: center;
             padding: 0.5rem 0;
+        }
+
+        #logoutButton {
+            display: block;
+            margin: 10px auto;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        #logoutButton:hover {
+            background: #5a6268;
         }
     </style>
 </head>
@@ -117,6 +152,7 @@
                 <button type="submit">Add Patient</button>
             </form>
             <div id="patientList"></div>
+            <button id="logoutButton">Logout</button>
         </section>
 
         <!-- About Section -->
@@ -146,13 +182,11 @@
             const username = document.getElementById("registerUsername").value;
             const password = document.getElementById("registerPassword").value;
 
-            // Check if username already exists
             if (users.some(user => user.username === username)) {
                 alert("Username already exists!");
                 return;
             }
 
-            // Add new user
             users.push({ username, password });
             alert("Registration successful! Please log in.");
             showSection("loginSection");
@@ -164,7 +198,6 @@
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
 
-            // Verify credentials
             const user = users.find(user => user.username === username && user.password === password);
             if (user) {
                 alert("Login successful!");
@@ -177,7 +210,6 @@
         // Add Patient functionality
         document.getElementById("patientForm").addEventListener("submit", function (e) {
             e.preventDefault();
-
             const name = document.getElementById("name").value;
             const age = document.getElementById("age").value;
             const condition = document.getElementById("condition").value;
@@ -187,12 +219,23 @@
             patientRecord.innerHTML = `
                 <strong>Name:</strong> ${name} <br>
                 <strong>Age:</strong> ${age} <br>
-                <strong>Condition:</strong> ${condition}
-                <hr>
+                <strong>Condition:</strong> ${condition} <br>
+                <button class="deletePatient">Delete</button>
             `;
-
             document.getElementById("patientList").appendChild(patientRecord);
+
+            // Delete patient functionality
+            patientRecord.querySelector(".deletePatient").addEventListener("click", function () {
+                patientRecord.remove();
+            });
+
             document.getElementById("patientForm").reset();
+        });
+
+        // Logout functionality
+        document.getElementById("logoutButton").addEventListener("click", function () {
+            alert("Logged out successfully!");
+            showSection("loginSection");
         });
 
         // Navigation between Login and Register
