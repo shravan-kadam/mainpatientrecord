@@ -26,6 +26,7 @@
 
         main {
             padding: 1rem;
+            position: relative; /* To ensure the logout button is positioned relative to the main section */
         }
 
         section {
@@ -99,8 +100,9 @@
         }
 
         #logoutButton {
-            display: block;
-            margin: 10px auto;
+            position: absolute;
+            top: 1rem; /* Adjusts the vertical position */
+            right: 1rem; /* Adjusts the horizontal position */
             background: #6c757d;
             color: white;
             border: none;
