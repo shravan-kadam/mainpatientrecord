@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Tracking System</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #007bff;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        main {
+            padding: 1rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+            display: none; /* Sections are hidden by default */
+        }
+
+        section.active {
+            display: block; /* Show active section */
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        form input, form button {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        form button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background: #0056b3;
+        }
+
+        #patientList {
+            margin-top: 1rem;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Patient Tracking System</h1>
+    </header>
+    <main>
+        <!-- Login Section -->
+        <section id="loginSection" class="active">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" id="goToRegister">Register here</a>.</p>
+            </form>
+        </section>
+
+        <!-- Registration Section -->
+        <section id="registerSection">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <input type="text" id="registerUsername" placeholder="Username" required>
+                <input type="password" id="registerPassword" placeholder="Password" required>
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="#" id="goToLogin">Login here</a>.</p>
+            </form>
+        </section>
+
+        <!-- Patient Section -->
+        <section id="patientsSection">
+            <h2>Patient Records</h2>
+            <form id="patientForm">
+                <input type="text" id="name" placeholder="Patient Name" required>
+                <input type="text" id="age" placeholder="Age" required>
+                <input type="text" id="condition" placeholder="Condition" required>
+                <button type="submit">Add Patient</button>
+            </form>
+            <div id="patientList"></div>
+        </section>
+
+        <!-- About Section -->
+        <section id="aboutSection">
+            <h2>About Us</h2>
+            <p>We aim to simplify healthcare management with intuitive solutions.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Patient Tracking System. All rights reserved.</p>
+    </footer>
+    <script>
+        // User data (stored temporarily)
+        const users = [];
+
+        // Section toggling function
+        function showSection(sectionId) {
+            document.querySelectorAll("section").forEach(section => {
+                section.classList.remove("active");
+            });
+            document.getElementById(sectionId).classList.add("active");
+        }
+
+        // Registration functionality
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const username = document.getElementById("registerUsername").value;
+            const password = document.getElementById("registerPassword").value;
+
+            // Check if username already exists
+            if (users.some(user => user.username === username)) {
+                alert("Username already exists!");
+                return;
+            }
+
+            // Add new user
+            users.push({ username, password });
+            alert("Registration successful! Please log in.");
+            showSection("loginSection");
+        });
+
+        // Login functionality
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            // Verify credentials
+            const user = users.find(user => user.username === username && user.password === password);
+            if (user) {
+                alert("Login successful!");
+                showSection("patientsSection");
+            } else {
+                alert("Invalid username or password!");
+            }
+        });
+
+        // Add Patient functionality
+        document.getElementById("patientForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const condition = document.getElementById("condition").value;
+
+            const patientRecord = document.createElement("div");
+            patientRecord.className = "patient";
+            patientRecord.innerHTML = `
+                <strong>Name:</strong> ${name} <br>
+                <strong>Age:</strong> ${age} <br>
+                <strong>Condition:</strong> ${condition}
+                <hr>
+            `;
+
+            document.getElementById("patientList").appendChild(patientRecord);
+            document.getElementById("patientForm").reset();
+        });
+
+        // Navigation between Login and Register
+        document.getElementById("goToRegister").addEventListener("click", function (e) {
+            e.preventDefault();
+            showSection("registerSection");
+        });
+
+        document.getElementById("goToLogin").addEventListener("click", function (e) {
+            e.preventDefault();
+            showSection("loginSection");
+        });
+    </script>
+</body>
+</html>
