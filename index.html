@@ -7,26 +7,32 @@
     <style>
         /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background: #f4f7fa;
+            color: #333;
             line-height: 1.6;
         }
 
         header {
             background: #007bff;
             color: #fff;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         header h1 {
             margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
         }
 
         main {
-            padding: 1rem;
-            position: relative; /* To ensure the logout button is positioned relative to the main section */
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
         }
 
         section {
@@ -40,18 +46,28 @@
 
         form {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            gap: 15px;
             max-width: 400px;
             margin: auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         form input, form button {
-            padding: 0.5rem;
+            padding: 0.8rem;
             font-size: 1rem;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        form input:focus, form button:focus {
+            outline: none;
+            border-color: #007bff;
         }
 
         form button {
@@ -66,11 +82,11 @@
         }
 
         #patientList {
-            margin-top: 1rem;
-            border: 1px solid #ddd;
+            margin-top: 2rem;
             padding: 1rem;
-            border-radius: 5px;
-            background: #f9f9f9;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .patient {
@@ -83,8 +99,8 @@
             color: #fff;
             border: none;
             cursor: pointer;
-            padding: 0.3rem 0.6rem;
-            border-radius: 3px;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
             font-size: 0.9rem;
         }
 
@@ -96,24 +112,40 @@
             background: #333;
             color: #fff;
             text-align: center;
-            padding: 0.5rem 0;
+            padding: 1rem 0;
+            margin-top: 2rem;
         }
 
         #logoutButton {
             position: absolute;
-            top: 1rem; /* Adjusts the vertical position */
-            right: 1rem; /* Adjusts the horizontal position */
+            top: 1rem;
+            right: 1rem;
             background: #6c757d;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
         }
 
         #logoutButton:hover {
             background: #5a6268;
+        }
+
+        /* Add media query for responsiveness */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            #logoutButton {
+                padding: 0.5rem 1rem;
+            }
         }
     </style>
 </head>
@@ -184,11 +216,20 @@
             const username = document.getElementById("registerUsername").value;
             const password = document.getElementById("registerPassword").value;
 
+            // Password validation: check for both letters and numbers
+            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)/;
+            if (!passwordRegex.test(password)) {
+                alert("Password must contain both letters and numbers.");
+                return;
+            }
+
+            // Check if the username already exists
             if (users.some(user => user.username === username)) {
                 alert("Username already exists!");
                 return;
             }
 
+            // Save the user
             users.push({ username, password });
             alert("Registration successful! Please log in.");
             showSection("loginSection");
@@ -200,6 +241,7 @@
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
 
+            // Check if the user exists and the password matches
             const user = users.find(user => user.username === username && user.password === password);
             if (user) {
                 alert("Login successful!");
@@ -236,20 +278,4 @@
 
         // Logout functionality
         document.getElementById("logoutButton").addEventListener("click", function () {
-            alert("Logged out successfully!");
-            showSection("loginSection");
-        });
-
-        // Navigation between Login and Register
-        document.getElementById("goToRegister").addEventListener("click", function (e) {
-            e.preventDefault();
-            showSection("registerSection");
-        });
-
-        document.getElementById("goToLogin").addEventListener("click", function (e) {
-            e.preventDefault();
-            showSection("loginSection");
-        });
-    </script>
-</body>
-</html>
+            alert
