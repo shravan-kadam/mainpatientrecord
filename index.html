@@ -12,7 +12,6 @@
             padding: 0;
             background: #f4f7fa;
             color: #333;
-            line-height: 1.6;
         }
 
         header {
@@ -21,17 +20,33 @@
             padding: 1.5rem 0;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         header h1 {
             margin: 0;
             font-size: 2.5rem;
-            font-weight: bold;
+        }
+
+        #logoutButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.8rem 1.5rem;
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #logoutButton:hover {
+            background: #5a6268;
         }
 
         main {
             padding: 2rem;
-            max-width: 1200px;
+            max-width: 800px;
             margin: auto;
         }
 
@@ -56,18 +71,20 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        form input, form button {
+        form h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        form input, form select, form button, form textarea {
             padding: 0.8rem;
             font-size: 1rem;
             border: 1px solid #ddd;
             border-radius: 8px;
             width: 100%;
             transition: all 0.3s ease;
-        }
-
-        form input:focus, form button:focus {
-            outline: none;
-            border-color: #007bff;
         }
 
         form button {
@@ -81,7 +98,29 @@
             background: #0056b3;
         }
 
-        #patientList {
+        #dashboardSection {
+            text-align: center;
+        }
+
+        #dashboardSection button {
+            display: inline-block;
+            margin: 10px;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            background: #28a745;
+            color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #dashboardSection button:hover {
+            background: #218838;
+        }
+
+        #recordsList {
             margin-top: 2rem;
             padding: 1rem;
             border-radius: 10px;
@@ -89,23 +128,51 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .patient {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+        .appointment {
+            background: #f9f9f9;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .patient button {
+        .appointment strong {
+            color: #007bff;
+        }
+
+        .removeAppointment {
             background: #dc3545;
             color: #fff;
             border: none;
-            cursor: pointer;
             padding: 0.5rem 1rem;
             border-radius: 5px;
+            cursor: pointer;
             font-size: 0.9rem;
         }
 
-        .patient button:hover {
+        .removeAppointment:hover {
             background: #c82333;
+        }
+
+        #backToDashboard {
+            margin-top: 1rem;
+            display: block;
+            width: fit-content;
+            padding: 0.8rem 1.5rem;
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        #backToDashboard:hover {
+            background: #5a6268;
         }
 
         footer {
@@ -113,51 +180,19 @@
             color: #fff;
             text-align: center;
             padding: 1rem 0;
-            margin-top: 2rem;
-        }
-
-        #logoutButton {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        #logoutButton:hover {
-            background: #5a6268;
-        }
-
-        /* Add media query for responsiveness */
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            form {
-                padding: 1.5rem;
-            }
-
-            #logoutButton {
-                padding: 0.5rem 1rem;
-            }
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Patient Tracking System</h1>
+        <button id="logoutButton">Logout</button>
     </header>
     <main>
         <!-- Login Section -->
         <section id="loginSection" class="active">
-            <h2>Login</h2>
             <form id="loginForm">
+                <h3>Login</h3>
                 <input type="text" id="loginUsername" placeholder="Username" required>
                 <input type="password" id="loginPassword" placeholder="Password" required>
                 <button type="submit">Login</button>
@@ -167,8 +202,8 @@
 
         <!-- Registration Section -->
         <section id="registerSection">
-            <h2>Register</h2>
             <form id="registerForm">
+                <h3>Register</h3>
                 <input type="text" id="registerUsername" placeholder="Username" required>
                 <input type="password" id="registerPassword" placeholder="Password" required>
                 <button type="submit">Register</button>
@@ -176,106 +211,144 @@
             </form>
         </section>
 
-        <!-- Patient Section -->
-        <section id="patientsSection">
-            <h2>Patient Records</h2>
-            <form id="patientForm">
-                <input type="text" id="name" placeholder="Patient Name" required>
-                <input type="text" id="age" placeholder="Age" required>
-                <input type="text" id="condition" placeholder="Condition" required>
-                <button type="submit">Add Patient</button>
-            </form>
-            <div id="patientList"></div>
-            <button id="logoutButton">Logout</button>
+        <!-- Dashboard Section -->
+        <section id="dashboardSection">
+            <h2>Dashboard</h2>
+            <button id="browseServices">Browse Services</button>
+            <button id="viewAppointments">View Appointments</button>
+            <button id="provideFeedback">Provide Feedback</button>
         </section>
 
-        <!-- About Section -->
-        <section id="aboutSection">
-            <h2>About Us</h2>
-            <p>We aim to simplify healthcare management with intuitive solutions.</p>
+        <!-- Feedback Section -->
+        <section id="feedbackSection">
+            <form id="feedbackForm">
+                <h3>Feedback</h3>
+                <textarea id="feedbackText" rows="5" placeholder="Enter your feedback" required></textarea>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </section>
+
+        <!-- Browse Services Section -->
+        <section id="browseServicesSection">
+            <h3>Browse Services</h3>
+            <form id="serviceForm">
+                <input type="text" id="patientName" placeholder="Enter Your Name" required>
+                <select id="services">
+                    <option value="General Checkup">General Checkup</option>
+                    <option value="Dental Care">Dental Care</option>
+                    <option value="Eye Care">Eye Care</option>
+                </select>
+                <input type="date" id="appointmentDate" required>
+                <button type="submit">Book Appointment</button>
+            </form>
+        </section>
+
+        <!-- View Appointments Section -->
+        <section id="viewAppointmentsSection">
+            <h3>Appointments</h3>
+            <div id="recordsList"></div>
+            <button id="backToDashboard">Back to Dashboard</button>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 Patient Tracking System. All rights reserved.</p>
     </footer>
     <script>
-        // User data (stored temporarily)
         const users = [];
+        const appointments = [];
 
-        // Section toggling function
         function showSection(sectionId) {
-            document.querySelectorAll("section").forEach(section => {
-                section.classList.remove("active");
-            });
+            document.querySelectorAll("section").forEach(section => section.classList.remove("active"));
             document.getElementById(sectionId).classList.add("active");
         }
 
-        // Registration functionality
+        // Register Form
         document.getElementById("registerForm").addEventListener("submit", function (e) {
             e.preventDefault();
             const username = document.getElementById("registerUsername").value;
             const password = document.getElementById("registerPassword").value;
-
-            // Password validation: check for both letters and numbers
-            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)/;
-            if (!passwordRegex.test(password)) {
-                alert("Password must contain both letters and numbers.");
-                return;
-            }
-
-            // Check if the username already exists
-            if (users.some(user => user.username === username)) {
-                alert("Username already exists!");
-                return;
-            }
-
-            // Save the user
             users.push({ username, password });
-            alert("Registration successful! Please log in.");
+            alert("Registration successful!");
             showSection("loginSection");
         });
 
-        // Login functionality
+        // Login Form
         document.getElementById("loginForm").addEventListener("submit", function (e) {
             e.preventDefault();
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
-
-            // Check if the user exists and the password matches
-            const user = users.find(user => user.username === username && user.password === password);
+            const user = users.find(u => u.username === username && u.password === password);
             if (user) {
-                alert("Login successful!");
-                showSection("patientsSection");
+                showSection("dashboardSection");
             } else {
-                alert("Invalid username or password!");
+                alert("Invalid login!");
             }
         });
 
-        // Add Patient functionality
-        document.getElementById("patientForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const name = document.getElementById("name").value;
-            const age = document.getElementById("age").value;
-            const condition = document.getElementById("condition").value;
-
-            const patientRecord = document.createElement("div");
-            patientRecord.className = "patient";
-            patientRecord.innerHTML = `
-                <strong>Name:</strong> ${name} <br>
-                <strong>Age:</strong> ${age} <br>
-                <strong>Condition:</strong> ${condition} <br>
-                <button class="deletePatient">Delete</button>
-            `;
-            document.getElementById("patientList").appendChild(patientRecord);
-
-            // Delete patient functionality
-            patientRecord.querySelector(".deletePatient").addEventListener("click", function () {
-                patientRecord.remove();
-            });
-
-            document.getElementById("patientForm").reset();
+        // Browse Services
+        document.getElementById("browseServices").addEventListener("click", function () {
+            showSection("browseServicesSection");
         });
 
-        // Logout functionality
+        // Book Appointment
+        document.getElementById("serviceForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = document.getElementById("patientName").value;
+            const service = document.getElementById("services").value;
+            const date = document.getElementById("appointmentDate").value;
+            appointments.push({ name, service, date });
+            alert("Appointment booked successfully!");
+            showSection("dashboardSection");
+        });
+
+        // View Appointments
+        document.getElementById("viewAppointments").addEventListener("click", function () {
+            const recordsList = document.getElementById("recordsList");
+            recordsList.innerHTML = appointments.map((appt, index) => `
+                <div class="appointment">
+                    <div>
+                        <strong>Name:</strong> ${appt.name}<br>
+                        <strong>Service:</strong> ${appt.service}<br>
+                        <strong>Date:</strong> ${appt.date}
+                    </div>
+                    <button class="removeAppointment" onclick="removeAppointment(${index})">Remove</button>
+                </div>
+            `).join("");
+            showSection("viewAppointmentsSection");
+        });
+
+        // Remove Appointment
+        function removeAppointment(index) {
+            appointments.splice(index, 1);
+            alert("Appointment removed successfully!");
+            document.getElementById("viewAppointments").click(); // Refresh the appointments list
+        }
+
+        // Back to Dashboard
+        document.getElementById("backToDashboard").addEventListener("click", function () {
+            showSection("dashboardSection");
+        });
+
+        // Feedback Form
+        document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Thank you for your feedback!");
+            showSection("dashboardSection");
+        });
+
+        // Logout
         document.getElementById("logoutButton").addEventListener("click", function () {
-            alert
+            showSection("loginSection");
+        });
+
+        // Navigation Links
+        document.getElementById("goToRegister").addEventListener("click", function () {
+            showSection("registerSection");
+        });
+
+        document.getElementById("goToLogin").addEventListener("click", function () {
+            showSection("loginSection");
+        });
+    </script>
+</body>
+</html>
